@@ -61,6 +61,7 @@ class _GameScreenState extends State<GameScreen> {
     choosePiece();
     const duration = const Duration(milliseconds: 350);
     Timer.periodic(duration, (Timer timer) {
+      
       clearRow();
       if (hitFloor()) {
         for (int i = 0; i < chosenPiece.length; i++) {
@@ -219,7 +220,7 @@ class _GameScreenState extends State<GameScreen> {
               backgroundColor: Colors.grey[900],
               title: Center(
                   child:
-                      Text('GAME OVER', style: TextStyle(color: Colors.red))),
+                      Text('GAME OVER', style: TextStyle(color: Colors.red, fontFamily: 'PipeDream',))),
               content: Text('High score: $score',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white)),
@@ -733,7 +734,7 @@ class _GameScreenState extends State<GameScreen> {
                         });
                       },
                       child:
-                          Text('PLAY', style: TextStyle(color: Colors.white))),
+                          Text('PLAY', style: TextStyle(color: Colors.white, fontFamily: 'PipeDream',))),
                   Button(
                       onTap: moveLeft,
                       child: Icon(Icons.arrow_left, color: Colors.white)),

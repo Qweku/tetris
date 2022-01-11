@@ -60,7 +60,7 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
                 child: FadeTransition(
                   opacity: _animation,
                   child: Text('T E T R I S',
-                      style: TextStyle(color:Colors.white, fontSize:20)),
+                      style: TextStyle(color:Colors.white, fontSize:20, fontFamily: 'PipeDream',)),
                 ),
               ),
             ),
