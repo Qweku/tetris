@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, unrelated_type_equality_checks
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:tetris/grid.dart';
@@ -711,45 +712,80 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    return Scaffold(
-        backgroundColor: Colors.grey[900],
-        body: Column(children: [
-          Expanded(
-              child: GridSection(
-            numberOfSquares: numberOfSquares,
-            landedPieces: landedPosColor,
-            newPiece: chosenPiece,
-            newColor: pieceColor[number % pieces.length],
-          )),
-          SizedBox(
-              height: height * 0.1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Button(
-                      onTap: () {
-                        startGame();
-                        setState(() {
-                          gameStarted = true;
-                        });
-                      },
-                      child:
-                          Text('PLAY', style: TextStyle(color: Colors.white, fontFamily: 'PipeDream',))),
-                  Button(
-                      onTap: moveLeft,
-                      child: Icon(Icons.arrow_left, color: Colors.white)),
-                  Button(
-                      onTap: moveRight,
-                      child: Icon(Icons.arrow_right, color: Colors.white)),
-                  Button(
-                      onTap: () {
-                        if (chosenPiece != pieces[0][0]) {
-                          rotatePiece();
-                        }else{}
-                      },
-                      child: Icon(Icons.rotate_right, color: Colors.white))
-                ],
-              ))
-        ]));
+    return WillPopScope(
+       onWillPop: () => _onBackPressed(context),
+      child: Scaffold(
+          backgroundColor: Colors.grey[900],
+          body: Column(children: [
+            Expanded(
+                child: GridSection(
+              numberOfSquares: numberOfSquares,
+              landedPieces: landedPosColor,
+              newPiece: chosenPiece,
+              newColor: pieceColor[number % pieces.length],
+            )),
+            SizedBox(
+                height: height * 0.1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Button(
+                        onTap: () {
+                          startGame();
+                          setState(() {
+                            gameStarted = true;
+                          });
+                        },
+                        child:
+                            Text('PLAY', style: TextStyle(color: Colors.white, fontFamily: 'PipeDream',))),
+                    Button(
+                        onTap: moveLeft,
+                        child: Icon(Icons.arrow_left, color: Colors.white)),
+                    Button(
+                        onTap: moveRight,
+                        child: Icon(Icons.arrow_right, color: Colors.white)),
+                    Button(
+                        onTap: () {
+                          if (chosenPiece != pieces[0][0]) {
+                            rotatePiece();
+                          }else{}
+                        },
+                        child: Icon(Icons.rotate_right, color: Colors.white))
+                  ],
+                ))
+          ])),
+    );
   }
+
+   Future<bool> _onBackPressed(BuildContext context) async {
+    final theme = Theme.of(context);
+    return (await showDialog<bool>(
+            context: context,
+            builder: (c) => AlertDialog(
+                  backgroundColor: Colors.grey[900],
+                  title: Center(
+                      child: Text("Warning",
+                          style: theme.textTheme.headline4!
+                              .copyWith(color: theme.cardColor))),
+                  content: Text("Do you really want to quit?",
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyText2),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          exit(0);
+                        },
+                        child: Text("Yes",
+                            style: theme.textTheme.bodyText2!
+                                .copyWith(color: theme.cardColor))),
+                    TextButton(
+                        onPressed: () => Navigator.pop(c, false),
+                        child: Text("No",
+                            style: theme.textTheme.bodyText2!
+                                .copyWith(color: theme.cardColor)))
+                  ],
+                ))) ??
+        false;
+  }
+
 }
